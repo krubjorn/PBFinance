@@ -1,0 +1,29 @@
+{
+  "name": "planetary-portfolio",
+  "version": "1.0.0",
+  "description": "A web application for simulating investment decisions within planetary boundaries.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "live-server src",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "finance",
+    "simulation",
+    "planetary boundaries"
+  ],
+  "author": "Maganizo K. Nyasulu",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/planetary-portfolio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/planetary-portfolio/issues"
+  },
+  "homepage": "https://github.com/yourusername/planetary-portfolio#readme"
+}
