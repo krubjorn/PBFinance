@@ -1,0 +1,15 @@
+body { font-family: Arial, sans-serif; margin:0; background:#f7f8fb; color:#111827; }
+header { text-align:center; padding:1em; }
+main { display:grid; grid-template-columns:1fr 520px; gap:16px; padding:16px; max-width:1200px; margin:0 auto; }
+.card { background:white; border-radius:8px; padding:12px; box-shadow:0 6px 18px rgba(17,24,39,0.04); }
+.buttons { display:flex; gap:8px; margin-bottom:8px; }
+.btn { padding:6px 10px; border-radius:6px; border:1px solid #e6eef9; cursor:pointer; }
+.btn.primary { background:#1f7acb; color:white; border:none; }
+.sliders-grid { margin-top:8px; }
+.slider-row { display:flex; gap:8px; align-items:center; margin:6px 0; }
+.slider-label { width:200px; font-weight:600; }
+.slider { flex:1; }
+.slider-value { width:50px; text-align:right; font-weight:700; color:#6b7280; }
+.chart { height:420px; }
+#simulation-log { background:#fbfbfb; padding:8px; border-radius:6px; max-height:220px; overflow:auto; font-family:monospace; }
+@media (max-width:980px) { main { grid-template-columns:1fr; padding:12px; } .slider-label { width:140px; } }

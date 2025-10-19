@@ -1,0 +1,106 @@
+// File 1 of the PBFinance_Game
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Planetary Portfolio — Interactive</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Plotly -->
+  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  <!-- PapaParse for CSV loading -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Planetary Portfolio — Investing Within Limits (Prototype)</h1>
+    <p class="lead">Allocate capital across industries and see how your choices affect Planetary Boundaries.</p>
+  </header>
+
+  <main>
+    <section id="controls-panel" class="card">
+      <div class="top-row">
+        <div class="roi-box">
+          <h3>Portfolio Summary</h3>
+          <div id="roi-value" class="big-number">—</div>
+          <div id="total-cap" class="muted">Total capital: $100M (proxy)</div>
+        </div>
+
+        <div class="buttons">
+          <button id="preset-sustainable" class="btn primary">Sustainable Preset</button>
+          <button id="preset-bau" class="btn">Business-as-Usual</button>
+          <button id="randomize" class="btn">Randomize</button>
+          <button id="reset" class="btn">Reset</button>
+        </div>
+      </div>
+
+      <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <label for="beta-file" style="font-weight:600;">Load beta matrix (CSV, rows=industries, cols=9):</label>
+        <input id="beta-file" type="file" accept=".csv" />
+        <button id="export-json" class="btn">Export JSON</button>
+        <input id="import-json" type="file" accept=".json" style="display:none" />
+        <button id="import-json-btn" class="btn">Import JSON</button>
+      </div>
+
+      <!-- New Add-on UI controls: regenFraction, integrator, dt -->
+      <div id="simulation-controls" style="margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <div style="display:flex;flex-direction:column;min-width:220px;">
+          <label style="font-weight:600;">Natural regeneration fraction (per year)</label>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input id="regen-fraction" type="range" min="0" max="0.20" step="0.005" value="0.05" />
+            <output id="regen-fraction-val">0.050</output>
+          </div>
+          <small class="muted">Fraction of threshold removed per year (sink)</small>
+        </div>
+
+        <div style="display:flex;flex-direction:column;min-width:180px;">
+          <label style="font-weight:600;">Integrator</label>
+          <select id="integrator-select" class="btn">
+            <option value="RK4">RK4 (stable)</option>
+            <option value="Euler">Euler</option>
+          </select>
+          <small class="muted">RK4 is recommended for time dynamics</small>
+        </div>
+
+        <div style="display:flex;flex-direction:column;min-width:150px;">
+          <label style="font-weight:600;">dt (years)</label>
+          <input id="dt-input" type="number" min="0.01" max="1" step="0.01" value="0.25" class="btn" />
+          <small class="muted">Time-step for each quarter (0.25 = quarter)</small>
+        </div>
+      </div>
+
+      <div id="alloc-sliders" class="sliders-grid"></div>
+    </section>
+
+    <section id="charts" class="card">
+      <div id="pb-chart" class="chart"></div>
+      <div id="alloc-chart" class="chart"></div>
+    </section>
+
+    <section class="card" id="legend-and-notes">
+      <h3>Simulation & Notes</h3>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <button id="simulate-quarters" class="btn">Simulate 8 Quarters</button>
+        <button id="simulate-quarters-24" class="btn">Simulate 24 Quarters (6y)</button>
+        <button id="clear-log" class="btn">Clear Log</button>
+      </div>
+      <div id="simulation-log" style="margin-top:10px; font-family:monospace; max-height:260px; overflow:auto; background:#fbfbfb; padding:8px; border-radius:6px;"></div>
+
+      <h4 style="margin-top:12px;">Notes</h4>
+      <ul>
+        <li>Red triangles on the left chart show the <strong>Planetary Boundary thresholds</strong> (units per $1M revenue).</li>
+        <li>Negative intensity values mean a restorative / net-beneficial effect per $1M revenue (e.g., sequestration).</li>
+        <li>Numbers are illustrative—swap in calibrated data for production use.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <small>Prototype • Use for demonstration and testing only</small>
+    <small>(citation suggestions) Maganizo Kruger Nyasulu, 2025, Planetary Boundaries and Finance: Conundrum of Financial Investment Decision within the Planetary Boundaries </small>
+
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
