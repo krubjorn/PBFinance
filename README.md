@@ -1,2 +1,0 @@
-# PBFinance
-Planetary Boundaries Finance
