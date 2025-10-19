@@ -1,113 +1,115 @@
-<!-- good -->
-<link rel="stylesheet" href="style.css">
-<script src="app.js"></script>
-
 <!-- avoid absolute leading slash like /app.js for project pages -->
-
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Planetary Portfolio — Interactive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planetary Portfolio &mdash; Networked (Clean UI)</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Plotly -->
-  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
-  <!-- PapaParse for CSV loading -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
 </head>
 <body>
-    <header>
-      <h1>Planetary Portfolio — Investing Within Limits (Prototype)</h1>
-      <p class="lead">Allocate capital across industries and see how your choices affect Planetary Boundaries.</p>
-      <!-- commit: add formatted citation (2025-10-19) -->
-      <!-- CITATION: Suggested reference for this prototype — Maganizo K. Nyasulu, 2025 -->
-      <small class="muted">Suggested citation: Nyasulu, M.K. (2025). Planetary Boundaries and Finance: Conundrum of Financial Investment Decision within the Planetary Boundaries. Prototype.</small>
-    </header>
+  <header>
+    <h1>Planetary Portfolio &mdash; Investing Within Limits</h1>
+    <p class="lead">Interactive prototype &mdash; allocations &rarr; portfolio Decisions and Pressures </p>
+    <small class="muted">Suggested citation: Nyasulu, M.K. (2025). Planetary Boundaries Finance: Conundrum of Financial Investment Decision within the Planetary Boundaries. </small>
+
+  </header>
+
   <main>
-    <section id="controls-panel" class="card">
-      <div class="top-row">
-        <div class="roi-box">
+    <aside class="panel card">
+      <div class="panel-row">
+        <div>
           <h3>Portfolio Summary</h3>
           <div id="roi-value" class="big-number">—</div>
-          <div id="total-cap" class="muted">Total capital: $100M (proxy)</div>
+          <div class="muted">Total capital: $100M (proxy)</div>
         </div>
-
-        <div class="buttons">
-          <button id="preset-sustainable" class="btn primary">Sustainable Preset</button>
-          <button id="preset-bau" class="btn">Business-as-Usual</button>
-          <button id="randomize" class="btn">Randomize</button>
-          <button id="reset" class="btn">Reset</button>
+        <div class="small-controls">
+          <button id="preset-sustainable" class="btn primary" aria-label="Preset Sustainable">Sustainable</button>
+          <button id="preset-bau" class="btn" aria-label="Preset BAU">BAU</button>
+          <button id="randomize" class="btn" aria-label="Randomize allocations">Random</button>
+          <button id="reset" class="btn" aria-label="Reset allocations">Reset</button>
         </div>
       </div>
 
-      <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-        <label for="beta-file" style="font-weight:600;">Load beta matrix (CSV, rows=industries, cols=9):</label>
+      <div class="file-row">
+        <label class="muted small" for="beta-file">Load beta matrix (CSV rows=industries, cols=9)</label>
         <input id="beta-file" type="file" accept=".csv" />
-        <button id="export-json" class="btn">Export JSON</button>
-        <input id="import-json" type="file" accept=".json" style="display:none" />
-        <button id="import-json-btn" class="btn">Import JSON</button>
       </div>
 
-      <!-- New Add-on UI controls: regenFraction, integrator, dt -->
-      <div id="simulation-controls" style="margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-        <div style="display:flex;flex-direction:column;min-width:220px;">
-          <label style="font-weight:600;">Natural regeneration fraction (per year)</label>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <input id="regen-fraction" type="range" min="0" max="0.20" step="0.005" value="0.05" />
-            <output id="regen-fraction-val">0.050</output>
-          </div>
-          <small class="muted">Fraction of threshold removed per year (sink)</small>
-        </div>
-
-        <div style="display:flex;flex-direction:column;min-width:180px;">
-          <label style="font-weight:600;">Integrator</label>
-          <select id="integrator-select" class="btn">
-            <option value="RK4">RK4 (stable)</option>
-            <option value="Euler">Euler</option>
-          </select>
-          <small class="muted">RK4 is recommended for time dynamics</small>
-        </div>
-
-        <div style="display:flex;flex-direction:column;min-width:150px;">
-          <label style="font-weight:600;">dt (years)</label>
-          <input id="dt-input" type="number" min="0.01" max="1" step="0.01" value="0.25" class="btn" />
-          <small class="muted">Time-step for each quarter (0.25 = quarter)</small>
-        </div>
+      <div class="toggles">
+        <label><input id="enable-supplychain" type="checkbox" checked /> Enable supply-chain multipliers</label>
+        <label><input id="enable-rebound" type="checkbox" checked /> Enable rebound effects</label>
       </div>
 
-      <div id="alloc-sliders" class="sliders-grid"></div>
-    </section>
+      <div class="sim-controls">
+        <label>Regen fraction (per year)</label>
+        <div class="inline">
+          <input id="regen-fraction" type="range" min="0" max="0.20" step="0.005" value="0.05" />
+          <output id="regen-fraction-val">0.050</output>
+        </div>
 
-    <section id="charts" class="card">
-      <div id="pb-chart" class="chart"></div>
-      <div id="alloc-chart" class="chart"></div>
-    </section>
+        <label>Integrator</label>
+        <select id="integrator-select">
+          <option>RK4</option>
+          <option>Euler</option>
+        </select>
 
-    <section class="card" id="legend-and-notes">
-      <h3>Simulation & Notes</h3>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-        <button id="simulate-quarters" class="btn">Simulate 8 Quarters</button>
-        <button id="simulate-quarters-24" class="btn">Simulate 24 Quarters (6y)</button>
-        <button id="clear-log" class="btn">Clear Log</button>
+        <label>dt (years)</label>
+        <input id="dt-input" type="number" min="0.01" max="1" step="0.01" value="0.25" />
+
+        <label>Mitigation (per PB)</label>
+        <div id="mitigation-controls" class="mitigation-grid"></div>
+
+        <div class="scenario-row">
+          <button id="add-quarter" class="btn" aria-label="Add quarter">Stamp quarter</button>
+          <button id="remove-quarter" class="btn" aria-label="Remove last quarter">Remove last</button>
+          <button id="clear-quarters" class="btn" aria-label="Clear quarters">Clear</button>
+          <div class="muted">Quarters: <span id="quarter-count">0</span></div>
+        </div>
+
+        <label>ROI feedback</label>
+        <div class="inline">
+          <input id="roi-feedback-toggle" type="checkbox" checked />
+          <label style="margin-left:8px" for="eta-input">Eta</label>
+          <input id="eta-input" type="range" min="0" max="1" step="0.01" value="0.35" />
+          <output id="eta-val">0.35</output>
+        </div>
+
+        <div class="file-row" style="margin-top:8px;">
+          <button id="export-json" class="btn" aria-label="Export snapshot">Export snapshot</button>
+          <input id="import-json" type="file" accept=".json" style="display:none" />
+          <button id="import-json-btn" class="btn" aria-label="Import snapshot">Import snapshot</button>
+        </div>
       </div>
-      <div id="simulation-log" style="margin-top:10px; font-family:monospace; max-height:260px; overflow:auto; background:#fbfbfb; padding:8px; border-radius:6px;"></div>
+    </aside>
 
-      <h4 style="margin-top:12px;">Notes</h4>
-      <ul>
-        <li>Red triangles on the left chart show the <strong>Planetary Boundary thresholds</strong> (units per $1M revenue).</li>
-        <li>Negative intensity values mean a restorative / net-beneficial effect per $1M revenue (e.g., sequestration).</li>
-        <li>Numbers are illustrative—swap in calibrated data for production use.</li>
-      </ul>
+    <section class="visuals card">
+      <div id="grid-plots" class="grid-quadrants">
+        <div id="pb-chart" class="plot-cell" role="img" aria-label="Planetary boundaries chart"></div>
+        <div id="alloc-chart" class="plot-cell" role="img" aria-label="Allocation chart"></div>
+        <div id="ts-chart" class="plot-cell" role="img" aria-label="Time series chart"></div>
+        <div id="sensitivity-heatmap" class="plot-cell" role="img" aria-label="Sensitivity heatmap"></div>
+      </div>
+
+      <div class="controls-row">
+        <button id="simulate-quarters" class="btn" aria-label="Simulate 8 quarters">Simulate 8 Qtrs</button>
+        <button id="simulate-quarters-24" class="btn" aria-label="Simulate 24 quarters">Simulate 24 Qtrs</button>
+        <button id="simulate-scenario" class="btn" aria-label="Simulate scenario">Simulate Scenario</button>
+        <button id="compute-sensitivity" class="btn" aria-label="Compute sensitivity">Compute Sensitivity</button>
+        <button id="download-sensitivity" class="btn" aria-label="Download sensitivity CSV">Download CSV</button>
+        <button id="clear-log" class="btn" aria-label="Clear log">Clear Log</button>
+      </div>
+
+      <div id="simulation-log" class="log card" aria-live="polite"></div>
     </section>
   </main>
 
   <footer>
-    <small>Prototype • Use for demonstration and testing only</small>
-
+    <small>Prototype • For demonstration only</small>
   </footer>
-  
-  <script src="app.js"></script>
+
+  <script src="app.js" defer></script>
 </body>
 </html>
