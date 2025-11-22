@@ -1,3 +1,12 @@
-node_modules/
-.DS_Store
-.env
+image: alpine:latest
+
+pages:
+  script:
+    - mkdir -p public
+    - cp -r * public || true
+    - rm -f public/.gitlab-ci.yml
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
