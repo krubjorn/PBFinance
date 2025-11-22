@@ -1,5 +1,5 @@
 {
-  "name": "planetary-portfolio",
+  "name": "pbfinance",
   "version": "1.0.0",
   "description": "A web application for simulating investment decisions within planetary boundaries.",
   "main": "src/app.js",
@@ -20,10 +20,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/planetary-portfolio.git"
+    "url": "git+https://github.com/nyasulu/pbfinance.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/planetary-portfolio/issues"
+    "url": "https://github.com/nyasulu/pbfinance/issues"
   },
-  "homepage": "https://github.com/yourusername/planetary-portfolio#readme"
+  "homepage": "https://github.com/nyasulu/pbfinance#readme"
 }
